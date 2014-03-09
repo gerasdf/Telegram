@@ -57,10 +57,11 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class SettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
+    static private boolean PrivacyPlus = false;
+
     private ListView listView;
     private ListAdapter listAdapter;
     private AvatarUpdater avatarUpdater = new AvatarUpdater();
-    private boolean PrivacyPlus = false;
 
     int profileRow;
     int numberSectionRow;

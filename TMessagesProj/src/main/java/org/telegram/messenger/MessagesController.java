@@ -50,6 +50,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
 
 public class MessagesController implements NotificationCenter.NotificationCenterDelegate {
+    static private boolean PrivacyPlus = true;
+
     public ConcurrentHashMap<Integer, TLRPC.Chat> chats = new ConcurrentHashMap<Integer, TLRPC.Chat>(100, 1.0f, 2);
     public ConcurrentHashMap<Integer, TLRPC.EncryptedChat> encryptedChats = new ConcurrentHashMap<Integer, TLRPC.EncryptedChat>(10, 1.0f, 2);
     public ConcurrentHashMap<Integer, TLRPC.User> users = new ConcurrentHashMap<Integer, TLRPC.User>(100, 1.0f, 2);
@@ -882,6 +884,9 @@ public class MessagesController implements NotificationCenter.NotificationCenter
     }
 
     public void sendTyping(long dialog_id, int classGuid) {
+
+        if (PrivacyPlus) return;
+
         if (dialog_id == 0) {
             return;
         }
@@ -1366,6 +1371,9 @@ public class MessagesController implements NotificationCenter.NotificationCenter
 
     public void markDialogAsRead(final long dialog_id, final int max_id, final int max_positive_id, final int offset, final int max_date, final boolean was) {
         int lower_part = (int)dialog_id;
+
+        if (PrivacyPlus) return;
+
         if (lower_part != 0) {
             if (max_id == 0 && offset == 0) {
                 return;

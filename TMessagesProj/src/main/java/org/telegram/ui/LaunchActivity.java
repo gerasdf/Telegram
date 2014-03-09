@@ -52,6 +52,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 
 public class LaunchActivity extends ActionBarActivity implements NotificationCenter.NotificationCenterDelegate, MessagesActivity.MessagesActivityDelegate {
+    static private boolean PrivacyPlus = true;
+
     private boolean finished = false;
     private NotificationView notificationView;
     private Uri photoPath = null;
@@ -66,7 +68,6 @@ public class LaunchActivity extends ActionBarActivity implements NotificationCen
     private View statusBackground;
     private TextView statusText;
     private View containerView;
-    private boolean PrivacyPlus = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

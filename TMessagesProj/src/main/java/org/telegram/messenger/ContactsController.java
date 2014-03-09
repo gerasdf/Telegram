@@ -31,6 +31,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ContactsController {
     public static ContactsController Instance = new ContactsController();
+    static private boolean PrivacyPlus = true;
+
     private Account currentAccount;
     public boolean loadingContacts = false;
     private boolean ignoreChanges = false;
@@ -39,7 +41,6 @@ public class ContactsController {
     public boolean contactsLoaded = false;
     private boolean contactsBookLoaded = false;
     private ArrayList<Integer> delayedContactsUpdate = new ArrayList<Integer>();
-    private boolean PrivacyPlus = true;
 
     public static class Contact {
         public int id;
