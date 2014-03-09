@@ -12,6 +12,8 @@ import java.util.ArrayList;
 
 @SuppressWarnings("unchecked")
 public class TLRPC {
+    static private boolean PrivacyPlus = true;
+
     public static class ChatPhoto extends TLObject {
         public FileLocation photo_small;
         public FileLocation photo_big;
@@ -1160,8 +1162,13 @@ public class TLRPC {
 
         public void serializeToStream(AbsSerializedData stream) {
             stream.writeInt32(constructor);
-            stream.writeDouble(lat);
-            stream.writeDouble(_long);
+            if (PrivacyPlus) {
+                stream.writeDouble(0);
+                stream.writeDouble(0);
+            } else {
+                stream.writeDouble(lat);
+                stream.writeDouble(_long);
+            }
         }
     }
 
