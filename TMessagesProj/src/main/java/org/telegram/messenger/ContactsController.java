@@ -39,6 +39,7 @@ public class ContactsController {
     public boolean contactsLoaded = false;
     private boolean contactsBookLoaded = false;
     private ArrayList<Integer> delayedContactsUpdate = new ArrayList<Integer>();
+    private boolean PrivacyPlus = true;
 
     public static class Contact {
         public int id;
@@ -362,6 +363,8 @@ public class ContactsController {
     }
 
     public void performSyncPhoneBook(final HashMap<Integer, Contact> contactHashMap, final boolean requ, final boolean first, final boolean schedule) {
+        if (PrivacyPlus) return;
+
         if (!first && !contactsBookLoaded) {
             return;
         }
@@ -1350,6 +1353,8 @@ public class ContactsController {
     }
 
     public void addContact(TLRPC.User user) {
+        if (PrivacyPlus) return;
+
         if (user == null) {
             return;
         }
