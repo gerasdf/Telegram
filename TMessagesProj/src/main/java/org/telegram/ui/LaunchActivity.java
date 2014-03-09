@@ -66,6 +66,7 @@ public class LaunchActivity extends ActionBarActivity implements NotificationCen
     private View statusBackground;
     private TextView statusText;
     private View containerView;
+    private boolean PrivacyPlus = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,7 @@ public class LaunchActivity extends ActionBarActivity implements NotificationCen
         getWindow().setBackgroundDrawableResource(R.drawable.transparent);
         getWindow().setFormat(PixelFormat.RGB_565);
 
-        if (!UserConfig.clientActivated) {
+        if (!PrivacyPlus && !UserConfig.clientActivated) {
             Intent intent = getIntent();
             if (intent != null && intent.getAction() != null && Intent.ACTION_SEND.equals(intent.getAction()) || intent.getAction().equals(Intent.ACTION_SEND_MULTIPLE)) {
                 finish();
