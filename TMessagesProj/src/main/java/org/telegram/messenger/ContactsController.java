@@ -1354,7 +1354,7 @@ public class ContactsController {
     }
 
     public void addContact(TLRPC.User user) {
-        if (PrivacyPlus) return;
+//        if (PrivacyPlus) return;
 
         if (user == null) {
             return;
