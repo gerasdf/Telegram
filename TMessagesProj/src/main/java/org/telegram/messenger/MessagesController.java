@@ -1372,7 +1372,45 @@ public class MessagesController implements NotificationCenter.NotificationCenter
     public void markDialogAsRead(final long dialog_id, final int max_id, final int max_positive_id, final int offset, final int max_date, final boolean was) {
         int lower_part = (int)dialog_id;
 
-        if (PrivacyPlus) return;
+        if (PrivacyPlus) {
+            if (lower_part != 0) {
+                if (max_id == 0 && offset == 0) {
+                    return;
+                }
+                if (offset == 0) {
+                    MessagesStorage.Instance.processPendingRead(dialog_id, max_positive_id, max_date, false);
+                }
+            } else {
+                if (max_date == 0) {
+                    return;
+                }
+                int encId = (int)(dialog_id >> 32);
+                TLRPC.EncryptedChat chat = encryptedChats.get(encId);
+
+                MessagesStorage.Instance.processPendingRead(dialog_id, max_id, max_date, false);
+                MessagesStorage.Instance.storageQueue.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        Utilities.RunOnUIThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                TLRPC.TL_dialog dialog = dialogs_dict.get(dialog_id);
+                                if (dialog != null) {
+                                    dialog.unread_count = 0;
+                                    NotificationCenter.Instance.postNotificationName(dialogsNeedReload);
+                                }
+                            }
+                        });
+                    }
+                });
+
+                if (chat.ttl > 0 && was) {
+                    int serverTime = Math.max(ConnectionsManager.Instance.getCurrentTime(), max_date);
+                    MessagesStorage.Instance.createTaskForDate(chat.id, serverTime, serverTime, 0);
+                }
+            }
+            return;
+        }
 
         if (lower_part != 0) {
             if (max_id == 0 && offset == 0) {
