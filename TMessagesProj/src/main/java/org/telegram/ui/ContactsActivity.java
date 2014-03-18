@@ -55,6 +55,8 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class ContactsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
+    static private boolean PrivacyPlus = true;
+
     private SectionedBaseAdapter listViewAdapter;
     private PinnedHeaderListView listView;
     private ContactsActivitySearchAdapter searchListViewAdapter;
@@ -264,6 +266,26 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                                     }
                                 }
                             });
+
+                            if (PrivacyPlus) {
+                                final String first_name = contact.first_name;
+                                final String last_name = contact.last_name;
+                                builder.setNeutralButton(getStringEntry(R.string.Add), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        try {
+                                            TLRPC.User user = new TLRPC.User();
+
+                                            user.phone = arg1;
+                                            user.first_name = first_name;
+                                            user.last_name = last_name;
+                                            ContactsController.Instance.addContact(user);
+                                        } catch (Exception e) {
+                                            FileLog.e("tmessages", e);
+                                        }
+                                    }
+                                });
+                            }
                             builder.setNegativeButton(getStringEntry(R.string.Cancel), null);
                             builder.show().setCanceledOnTouchOutside(true);
                         }
