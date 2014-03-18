@@ -57,7 +57,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class SettingsActivity extends BaseFragment implements NotificationCenter.NotificationCenterDelegate {
-    static private boolean PrivacyPlus = false;
+    static private boolean PrivacyPlus = true;
 
     private ListView listView;
     private ListAdapter listAdapter;
