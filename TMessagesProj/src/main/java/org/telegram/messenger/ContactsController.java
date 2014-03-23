@@ -367,7 +367,6 @@ public class ContactsController {
         if (PrivacyPlus) {
             // Force loading contacts from server
             loadContacts(false, true);
-            return;
         }
 
         if (!first && !contactsBookLoaded) {
@@ -584,7 +583,7 @@ public class ContactsController {
                 FileLog.e("tmessages", "done processing contacts");
 
                 if (request) {
-                    if (!toImport.isEmpty()) {
+                    if (!PrivacyPlus && !toImport.isEmpty()) {
 //                        if (ConnectionsManager.DEBUG_VERSION) {
 //                            FileLog.e("tmessages", "start import contacts");
 //                            for (TLRPC.TL_inputPhoneContact contact : toImport) {
@@ -592,6 +591,7 @@ public class ContactsController {
 //                            }
 //                        }
                         final int count = (int)Math.ceil(toImport.size() / 500.0f);
+
                         for (int a = 0; a < count; a++) {
                             ArrayList<TLRPC.TL_inputPhoneContact> finalToImport = new ArrayList<TLRPC.TL_inputPhoneContact>();
                             finalToImport.addAll(toImport.subList(a * 500, Math.min((a + 1) * 500, toImport.size())));
@@ -664,6 +664,11 @@ public class ContactsController {
                                 NotificationCenter.Instance.postNotificationName(MessagesController.contactsDidLoaded);
                             }
                         });
+                        if (PrivacyPlus) {
+                            if (!contactsMap.isEmpty()) {
+                                MessagesStorage.Instance.putCachedPhoneBook(contactsMap);
+                            }
+                        }
                     }
                 } else {
                     Utilities.stageQueue.postRunnable(new Runnable() {
