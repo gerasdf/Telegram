@@ -66,7 +66,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
     private boolean usersAsSections;
     private boolean destroyAfterSelect;
     private boolean returnAsResult;
-    private boolean createSecretChat;
+    private boolean createSecretChat = true;
     private boolean creatingChat = false;
     public int selectAlertString = 0;
     private SearchView searchView;
@@ -94,7 +94,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
             destroyAfterSelect = getArguments().getBoolean("destroyAfterSelect", false);
             usersAsSections = getArguments().getBoolean("usersAsSections", false);
             returnAsResult = getArguments().getBoolean("returnAsResult", false);
-            createSecretChat = getArguments().getBoolean("createSecretChat", false);
+            createSecretChat = getArguments().getBoolean("createSecretChat", true);
             if (destroyAfterSelect) {
                 ignoreUsers = (HashMap<Integer, TLRPC.User>)NotificationCenter.Instance.getFromMemCache(7);
             }
