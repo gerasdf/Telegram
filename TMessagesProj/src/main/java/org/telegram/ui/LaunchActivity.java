@@ -76,7 +76,7 @@ public class LaunchActivity extends ActionBarActivity implements NotificationCen
         getWindow().setBackgroundDrawableResource(R.drawable.transparent);
         getWindow().setFormat(PixelFormat.RGB_565);
 
-        if (!PrivacyPlus && !UserConfig.clientActivated) {
+        if (!UserConfig.clientActivated) {
             Intent intent = getIntent();
             if (intent != null && intent.getAction() != null && Intent.ACTION_SEND.equals(intent.getAction()) || intent.getAction().equals(Intent.ACTION_SEND_MULTIPLE)) {
                 finish();
