@@ -1173,7 +1173,11 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                     }
 
                     TLRPC.TL_account_updateStatus req = new TLRPC.TL_account_updateStatus();
-                    req.offline = false;
+                    if (PrivacyPlus) {
+                        req.offline = true;
+                    } else {
+                        req.offline = false;
+                    }
                     statusRequest = ConnectionsManager.getInstance().performRpc(req, new RPCRequest.RPCRequestDelegate() {
                         @Override
                         public void run(TLObject response, TLRPC.TL_error error) {
