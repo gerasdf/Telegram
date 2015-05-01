@@ -41,6 +41,7 @@ import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ContactsController {
+    private boolean PrivacyPlus = true;
 
     private Account currentAccount;
     private boolean loadingContacts = false;
@@ -483,6 +484,8 @@ public class ContactsController {
     }
 
     public void performSyncPhoneBook(final HashMap<Integer, Contact> contactHashMap, final boolean requ, final boolean first, final boolean schedule) {
+        if (PrivacyPlus) return;
+
         if (!first && !contactsBookLoaded) {
             return;
         }
@@ -1497,6 +1500,8 @@ public class ContactsController {
     }
 
     public void addContact(TLRPC.User user) {
+        if (PrivacyPlus) return;
+
         if (user == null || user.phone == null) {
             return;
         }
