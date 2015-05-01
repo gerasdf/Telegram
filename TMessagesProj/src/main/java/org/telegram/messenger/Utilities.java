@@ -56,6 +56,8 @@ import java.util.zip.GZIPOutputStream;
 import javax.crypto.Cipher;
 
 public class Utilities {
+    static private boolean PrivacyPlus = true;
+
     public static Pattern pattern = Pattern.compile("[0-9]+");
     public static SecureRandom random = new SecureRandom();
 
@@ -758,6 +760,8 @@ public class Utilities {
     }
 
     public static void checkForCrashes(Activity context) {
+        if (PrivacyPlus) return;
+
         CrashManager.register(context, BuildVars.HOCKEY_APP_HASH, new CrashManagerListener() {
             @Override
             public boolean includeDeviceData() {
@@ -767,6 +771,8 @@ public class Utilities {
     }
 
     public static void checkForUpdates(Activity context) {
+        if (PrivacyPlus) return;
+
         if (BuildVars.DEBUG_VERSION) {
             UpdateManager.register(context, BuildVars.HOCKEY_APP_HASH);
         }
