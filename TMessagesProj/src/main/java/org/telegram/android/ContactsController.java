@@ -484,7 +484,12 @@ public class ContactsController {
     }
 
     public void performSyncPhoneBook(final HashMap<Integer, Contact> contactHashMap, final boolean requ, final boolean first, final boolean schedule) {
-        if (PrivacyPlus) return;
+        if (PrivacyPlus) {
+            // Force loading contacts from server
+            loadContacts(false, true);
+            return;
+        }
+
 
         if (!first && !contactsBookLoaded) {
             return;
