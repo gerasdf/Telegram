@@ -41,7 +41,7 @@ import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ContactsController {
-    private boolean PrivacyPlus = true;
+    static private boolean PrivacyPlus = true;
 
     private Account currentAccount;
     private boolean loadingContacts = false;

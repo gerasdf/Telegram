@@ -68,7 +68,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class LaunchActivity extends Activity implements ActionBarLayout.ActionBarLayoutDelegate, NotificationCenter.NotificationCenterDelegate, MessagesActivity.MessagesActivityDelegate {
-    private boolean PrivacyPlus = true;
+    static private boolean PrivacyPlus = true;
 
     private boolean finished;
     private String videoPath;
