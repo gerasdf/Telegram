@@ -434,12 +434,16 @@ public class LaunchActivity extends ActionBarActivity implements NotificationCen
     }
 
     private void checkForCrashes() {
-        CrashManager.register(this, ConnectionsManager.HOCKEY_APP_HASH);
+        if (!PrivacyPlus) {
+            CrashManager.register(this, ConnectionsManager.HOCKEY_APP_HASH);
+        }
     }
 
     private void checkForUpdates() {
-        if (ConnectionsManager.DEBUG_VERSION) {
-            UpdateManager.register(this, ConnectionsManager.HOCKEY_APP_HASH);
+        if (!PrivacyPlus) {
+            if (ConnectionsManager.DEBUG_VERSION) {
+                UpdateManager.register(this, ConnectionsManager.HOCKEY_APP_HASH);
+            }
         }
     }
 
@@ -825,4 +829,5 @@ public class LaunchActivity extends ActionBarActivity implements NotificationCen
             FileLog.e("tmessages", e);
         }
     }
+
 }
