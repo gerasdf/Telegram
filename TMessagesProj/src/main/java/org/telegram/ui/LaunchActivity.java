@@ -68,6 +68,8 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class LaunchActivity extends Activity implements ActionBarLayout.ActionBarLayoutDelegate, NotificationCenter.NotificationCenterDelegate, MessagesActivity.MessagesActivityDelegate {
+    private boolean PrivacyPlus = true;
+
     private boolean finished;
     private String videoPath;
     private String sendingText;
@@ -104,22 +106,24 @@ public class LaunchActivity extends Activity implements ActionBarLayout.ActionBa
     protected void onCreate(Bundle savedInstanceState) {
         ApplicationLoader.postInitApplication();
 
-        if (!UserConfig.isClientActivated()) {
-            Intent intent = getIntent();
-            if (intent != null && intent.getAction() != null && (Intent.ACTION_SEND.equals(intent.getAction()) || intent.getAction().equals(Intent.ACTION_SEND_MULTIPLE))) {
-                super.onCreate(savedInstanceState);
-                finish();
-                return;
-            }
-            if (intent != null && !intent.getBooleanExtra("fromIntro", false)) {
-                SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("logininfo", MODE_PRIVATE);
-                Map<String, ?> state = preferences.getAll();
-                if (state.isEmpty()) {
-                    Intent intent2 = new Intent(this, IntroActivity.class);
-                    startActivity(intent2);
+        if (!PrivacyPlus) {
+            if (!UserConfig.isClientActivated()) {
+                Intent intent = getIntent();
+                if (intent != null && intent.getAction() != null && (Intent.ACTION_SEND.equals(intent.getAction()) || intent.getAction().equals(Intent.ACTION_SEND_MULTIPLE))) {
                     super.onCreate(savedInstanceState);
                     finish();
                     return;
+                }
+                if (intent != null && !intent.getBooleanExtra("fromIntro", false)) {
+                    SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("logininfo", MODE_PRIVATE);
+                    Map<String, ?> state = preferences.getAll();
+                    if (state.isEmpty()) {
+                        Intent intent2 = new Intent(this, IntroActivity.class);
+                        startActivity(intent2);
+                        super.onCreate(savedInstanceState);
+                        finish();
+                        return;
+                    }
                 }
             }
         }
