@@ -373,7 +373,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                             if (PrivacyPlus) {
                                 final String first_name = contact.first_name;
                                 final String last_name = contact.last_name;
-                                builder.setNeutralButton(getStringEntry(R.string.Add), new DialogInterface.OnClickListener() {
+                                builder.setNeutralButton(LocaleController.getString("Add", R.string.Add), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         try {
@@ -382,7 +382,7 @@ public class ContactsActivity extends BaseFragment implements NotificationCenter
                                             user.phone = arg1;
                                             user.first_name = first_name;
                                             user.last_name = last_name;
-                                            ContactsController.Instance.addContact(user);
+                                            ContactsController.getInstance().addContact(user);
                                         } catch (Exception e) {
                                             FileLog.e("tmessages", e);
                                         }
