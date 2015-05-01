@@ -1836,8 +1836,6 @@ public class MessagesController implements NotificationCenter.NotificationCenter
         int lower_part = (int)dialog_id;
         int high_id = (int)(dialog_id >> 32);
 
-        if (PrivacyPlus) return;
-
         if (lower_part != 0) {
             if (max_positive_id == 0 && offset == 0 || high_id == 1) {
                 return;
@@ -1891,20 +1889,22 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                     }
                 });
             }
-            if (req.max_id != Integer.MAX_VALUE) {
-                ConnectionsManager.getInstance().performRpc(req, new RPCRequest.RPCRequestDelegate() {
-                    @Override
-                    public void run(TLObject response, TLRPC.TL_error error) {
-                        if (error == null) {
-                            MessagesStorage.getInstance().processPendingRead(dialog_id, max_positive_id, max_date, true);
-                            TLRPC.TL_messages_affectedHistory res = (TLRPC.TL_messages_affectedHistory) response;
-                            if (res.offset > 0) {
-                                markDialogAsRead(dialog_id, 0, max_positive_id, res.offset, max_date, was, popup);
+            if (!PrivacyPlus) {
+                if (req.max_id != Integer.MAX_VALUE) {
+                    ConnectionsManager.getInstance().performRpc(req, new RPCRequest.RPCRequestDelegate() {
+                        @Override
+                        public void run(TLObject response, TLRPC.TL_error error) {
+                            if (error == null) {
+                                MessagesStorage.getInstance().processPendingRead(dialog_id, max_positive_id, max_date, true);
+                                TLRPC.TL_messages_affectedHistory res = (TLRPC.TL_messages_affectedHistory) response;
+                                if (res.offset > 0) {
+                                    markDialogAsRead(dialog_id, 0, max_positive_id, res.offset, max_date, was, popup);
+                                }
+                                processNewDifferenceParams(-1, res.pts, -1, res.pts_count);
                             }
-                            processNewDifferenceParams(-1, res.pts, -1, res.pts_count);
                         }
-                    }
-                });
+                    });
+                }
             }
         } else {
             if (max_date == 0) {
@@ -1918,12 +1918,14 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                 req.peer.access_hash = chat.access_hash;
                 req.max_date = max_date;
 
-                ConnectionsManager.getInstance().performRpc(req, new RPCRequest.RPCRequestDelegate() {
-                    @Override
-                    public void run(TLObject response, TLRPC.TL_error error) {
-                        //MessagesStorage.getInstance().processPendingRead(dialog_id, max_id, max_date, true);
-                    }
-                });
+                if (!PrivacyPlus) {
+                    ConnectionsManager.getInstance().performRpc(req, new RPCRequest.RPCRequestDelegate() {
+                        @Override
+                        public void run(TLObject response, TLRPC.TL_error error) {
+                            //MessagesStorage.getInstance().processPendingRead(dialog_id, max_id, max_date, true);
+                        }
+                    });
+                }
             }
             MessagesStorage.getInstance().processPendingRead(dialog_id, max_id, max_date, false);
 
@@ -1947,10 +1949,12 @@ public class MessagesController implements NotificationCenter.NotificationCenter
                 }
             });
 
+            // if (!PrivacyPlus) {  // Enable so secret chats are not destroyed... I think
             if (chat.ttl > 0 && was) {
                 int serverTime = Math.max(ConnectionsManager.getInstance().getCurrentTime(), max_date);
                 MessagesStorage.getInstance().createTaskForSecretChat(chat.id, serverTime, serverTime, 0, null);
             }
+            // }
         }
     }
 
